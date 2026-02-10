@@ -5,9 +5,8 @@ export default function ErrorPage() {
 
   return (
     <div>
-      <h1> Error</h1>
-      <p>No se pudieron cargar los datos.</p>
-      <pre>{error.message}</pre>
+      <h2>Error </h2>
+      <p>{error.message}</p>
     </div>
   );
 }

@@ -13,47 +13,54 @@ export default function CountryDetails() {
   );
 
   if (!country) {
-    return <p> País no encontrado</p>;
+    return <h2>País no encontrado </h2>;
   }
 
   const languages = country.languages
     ? Object.values(country.languages).join(", ")
-    : "No disponibles";
+    : "N/A";
 
   const borders = country.borders || [];
 
-  const borderCountries = borders
-    .map((code) =>
-      countries.find((c) => c.cca3 === code)
-    )
-    .filter(Boolean);
-
   return (
     <div>
-      <h1>{country.name.official}</h1>
-      <p><strong>Capital:</strong> {country.capital?.[0]}</p>
-      <p>
-        <strong>Población:</strong>{" "}
-        {country.population.toLocaleString()}
-      </p>
-      <p>
-        <strong>Región:</strong> {country.region} –{" "}
-        {country.subregion}
-      </p>
-      <p><strong>Idiomas:</strong> {languages}</p>
-
-      <h3>Países Fronterizos</h3>
-      {borderCountries.length === 0 && <p>Ninguno</p>}
+      <h2>{country.name.official}</h2>
 
       <ul>
-        {borderCountries.map((b) => (
-          <li key={b.cca3}>
-            <Link to={`/country/${b.name.common.toLowerCase()}`}>
-              {b.name.common}
-            </Link>
-          </li>
-        ))}
+        <li><strong>Capital:</strong> {country.capital?.[0]}</li>
+        <li>
+          <strong>Población:</strong>{" "}
+          {country.population.toLocaleString()}
+        </li>
+        <li>
+          <strong>Continente:</strong>{" "}
+          {country.region} ({country.subregion})
+        </li>
+        <li><strong>Idiomas:</strong> {languages}</li>
       </ul>
+
+      <h3>Países Fronterizos</h3>
+
+      {borders.length === 0 ? (
+        <p>No tiene fronteras</p>
+      ) : (
+        borders.map((code) => {
+          const borderCountry = countries.find(
+            (c) => c.cca3 === code
+          );
+
+          return (
+            borderCountry && (
+              <Link
+                key={code}
+                to={`/country/${borderCountry.name.common.toLowerCase()}`}
+              >
+                <button>{borderCountry.name.common}</button>
+              </Link>
+            )
+          );
+        })
+      )}
     </div>
   );
 }
